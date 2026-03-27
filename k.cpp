@@ -1,67 +1,44 @@
-#include <iostream>
+
+  #include <bits/stdc++.h>
 using namespace std;
 
-void merge(int arr[], int left, int mid, int right) {
-    int i = left;
-    int j = mid + 1;
-    int k = left;
-    int temp[100];
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];  // last element as pivot
+    int i = low - 1;
 
-    while(i <= mid && j <= right) {
-        if(arr[i] <= arr[j]) {
-            temp[k] = arr[i];
+    for(int j = low; j < high; j++) {
+        if(arr[j] <= pivot) {
             i++;
-        } else {
-            temp[k] = arr[j];
-            j++;
+            swap(arr[i], arr[j]);
         }
-        k++;
     }
 
-    while(i <= mid) {
-        temp[k] = arr[i];
-        i++;
-        k++;
-    }
-
-    while(j <= right) {
-        temp[k] = arr[j];
-        j++;
-        k++;
-    }
-
-    for(int p = left; p <= right; p++) {
-        arr[p] = temp[p];
-    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
 }
 
-void mergeSort(int arr[], int left, int right) {
-    if(left < right) {
-        int mid = (left + right) / 2;
+void quickSort(int arr[], int low, int high) {
+    if(low < high) {
+        int pi = partition(arr, low, high);
 
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
-
-        merge(arr, left, mid, right);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
 int main() {
     int n;
-
-    cout << "Enter number of elements: ";
     cin >> n;
 
-    int arr[100];
+    int arr[n];
 
-    cout << "Enter elements: ";
     for(int i = 0; i < n; i++) {
         cin >> arr[i];
     }
 
-    mergeSort(arr, 0, n - 1);
+    quickSort(arr, 0, n - 1);
 
-    cout << "Sorted array: ";
+    cout << "Sorted array:\n";
     for(int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
